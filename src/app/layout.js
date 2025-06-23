@@ -9,12 +9,13 @@ import ScrollToTop from "@/components/ScrollToTop";
 
 export const metadata = {
   title: "Jobverse - Your Gateway to Better Careers",
-  description: "Explore thousands of jobs across industries with Jobverse – your ultimate job portal for career growth and hiring talent.",
+  description:
+    "Explore thousands of jobs across industries with Jobverse – your ultimate job portal for career growth and hiring talent.",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
         <ProviderRedux>
           <ThemeProvider
