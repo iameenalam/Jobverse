@@ -62,13 +62,21 @@ export const getUser = () => async (dispatch) => {
   try {
     dispatch(loadingStart());
 
-    const { data } = await axios.get(
-      "/api/user/myprofile?token=" + Cookies.get("token")
-    );
+    const token = Cookies.get("token");
+
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const { data } = await axios.get("/api/user/myprofile", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     dispatch(getUserSucces(data));
   } catch (error) {
-    dispatch(getUserFail(error.response.data.message));
+    dispatch(getUserFail(error.response?.data?.message || error.message));
   }
 };
 

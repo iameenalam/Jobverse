@@ -7,33 +7,26 @@ export async function GET(req) {
   try {
     await connectDb();
 
-    const { searchParams } = new URL(req.url);
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return NextResponse.json(
+        { message: "Unauthorized: No token provided" },
+        { status: 401 }
+      );
+    }
 
-    const token = searchParams.get("token");
+    const token = authHeader.split(" ")[1];
 
     const user = await CheckAuth(token);
 
-    if (!user)
-      return NextResponse.json(
-        {
-          message: "Please Login",
-        },
-        {
-          status: 400,
-        }
-      );
+    if (!user) {
+      return NextResponse.json({ message: "Please Login" }, { status: 400 });
+    }
 
     const loggedInUser = await User.findById(user._id);
 
     return NextResponse.json(loggedInUser);
   } catch (error) {
-    return NextResponse.json(
-      {
-        message: error.message,
-      },
-      {
-        status: 500,
-      }
-    );
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
