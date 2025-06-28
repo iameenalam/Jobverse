@@ -4,7 +4,7 @@ import { Job } from "../../../../../models/Job";
 
 export async function GET(req) {
   try {
-    connectDb();
+    await connectDb();
 
     const { searchParams } = new URL(req.url);
 
